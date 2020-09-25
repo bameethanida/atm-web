@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/main_layout}"
+      xmlns:th="https://www.thymeleaf.org">
+
 <head>
 
     <meta charset="UTF-8">
@@ -10,7 +13,7 @@
 
 </head>
 <body>
-    <div class="container center-text">
+    <div layout:fragment="content" class="container center-text">
         <div class="jumbotron">
             <h1 class="display-4 my-font" th:text="${greeting}"></h1>
             <p class="lead">Hello, everyone.</p>
