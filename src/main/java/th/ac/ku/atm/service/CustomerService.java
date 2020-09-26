@@ -1,38 +1,38 @@
 package th.ac.ku.atm.service;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import th.ac.ku.atm.data.CustomerRepository;
 import th.ac.ku.atm.model.Customer;
 import org.mindrot.jbcrypt.BCrypt;
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CustomerService {
     // responsible for processing and managing customer information
-    private List<Customer> customerList;
+    private CustomerRepository repository;
 
-    @PostConstruct
-    public void postConstruct() {
-        this.customerList = new ArrayList<>();
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
     }
 
     public void createCustomer(Customer customer) {
         String hashPin = hash(customer.getPin());
         customer.setPin(hashPin);
-        customerList.add(customer);
-    }
-
-    public List<Customer> getCustomers() {
-        return new ArrayList<>(this.customerList);
+        repository.save(customer);
     }
 
     public Customer findCustomer(int id) {
-        for (Customer customer : customerList) {
-            if (customer.getId() == id)
-                return customer;
+        try {
+            return repository.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
-        return null;
+
+    }
+
+    public List<Customer> getCustomers() {
+        return repository.findAll();
     }
 
     public Customer checkPin(Customer inputCustomer) {
@@ -41,9 +41,9 @@ public class CustomerService {
 
         // 2. ถ้ามี id ตรง ให้เช็ค pin ว่าตรงกันไหม โดยใช้ฟังก์ชันเกี่ยวกับ hash
         if (storedCustomer != null) {
-            String hashPin = storedCustomer.getPin();
+            String storedPin = storedCustomer.getPin();
 
-            if (BCrypt.checkpw(inputCustomer.getPin(), hashPin))
+            if (BCrypt.checkpw(inputCustomer.getPin(), storedPin))
                 return storedCustomer;
         }
         // 3. ถ้าไม่ตรง ต้องคืนค่า null
