@@ -1,21 +1,34 @@
 package th.ac.ku.atm.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import th.ac.ku.atm.model.BankAccount;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
 @Service
 public class BankAccountService {
-
+    private RestTemplate restTemplate;
     private ArrayList<BankAccount> bankAccountList;
 
-    @PostConstruct
-    public void postContruct() {
-        bankAccountList = new ArrayList<>();
+    public BankAccountService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public List<BankAccount> getCustomerBankAccount(int customerId) {
+        String url = "http://localhost:8091/api/bankaccount/customer/" +
+                customerId;
+        ResponseEntity<BankAccount[]> response =
+                restTemplate.getForEntity(url, BankAccount[].class);
+
+        BankAccount[] accounts = response.getBody();
+
+        return Arrays.asList(accounts);
     }
 
     public void createCustomer(BankAccount bankAccount) {
@@ -25,17 +38,6 @@ public class BankAccountService {
     public List<BankAccount> getBankAcoounts() {
         return new ArrayList<>(this.bankAccountList);
     }
-
-    public BankAccount findBankAccount(int id) {
-        for (BankAccount bankAccount : bankAccountList) {
-            if (bankAccount.getId() == id)
-                return bankAccount;
-        }
-        return null;
-    }
-
-
-
 
 
 
