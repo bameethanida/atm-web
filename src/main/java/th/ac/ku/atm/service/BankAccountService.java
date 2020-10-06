@@ -34,6 +34,12 @@ public class BankAccountService {
         restTemplate.put(url, bankAccount);
     }
 
+    public void deleteBankAccount(BankAccount bankAccount){
+        String url = "http://localhost:8091/api/bankaccount/" +
+                bankAccount.getId();
+        restTemplate.delete(url, bankAccount);
+    }
+
     public List<BankAccount> getCustomerBankAccount(int customerId) {
         String url = "http://localhost:8091/api/bankaccount/customer/" +
                 customerId;
@@ -61,11 +67,5 @@ public class BankAccountService {
 
         restTemplate.postForObject(url, bankAccount, BankAccount.class);
     }
-
-
-
-
-
-
 
 }
