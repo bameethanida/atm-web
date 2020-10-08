@@ -4,30 +4,48 @@
       xmlns:th="https://www.thymeleaf.org">
 
 <div class="container" layout:fragment="content">
-    <h1>Edit Bank Account</h1>
-    <form
-            th:action="@{/bankaccount/edit/{id}(id=${allBankAccounts.id})}"
-            th:object="${allBankAccounts}"
-            method="POST">
+    <h1>Bank Account</h1>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-light">
+        <tr>
+            <th>Id</th>
+            <th>CustomerId</th>
+            <th>Type</th>
+            <th>Balance</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bankAccount : ${allBankAccounts}">
+            <td th:text="${bankAccount.id}"></td>
+            <td th:text="${bankAccount.customerId}"></td>
+            <td th:text="${bankAccount.type}"></td>
+            <td th:text="${bankAccount.balance}"></td>
+        </tr>
+        </tbody>
+    </table>
 
+    <form action="#" th:action="@{/transaction}" method="POST">
         <div class="form-group">
-            <label for="inputId">Id</label>
-            <input disabled type="text" th:field="*{id}" class="form-control" id="inputId">
+            <label for="inputBankAccountId">Bankaccount Id</label>
+            <input type="input" class="form-control" name="bankAccountId" id="inputBankAccountId">
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label for="inputTransactionType">Transaction Type</label>
+            </div>
+            <div class="px-5">
+                <select name="transactionType" id="inputTransactionType">
+                    <option selected>Choose...</option>
+                    <option value="Deposit">Deposit</option>
+                    <option value="Withdraw">Withdraw</option>
+                </select>
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="inputCustomer">Customer Id</label>
-            <input disabled type="text" th:field="*{customerId}" class="form-control" id="inputCustomer">
-        </div>
-
-        <div class="form-group">
-            <label for="inputType">Type</label>
-            <input disabled type="text" th:field="*{type}" class="form-control" id="inputType">
-        </div>
-
-        <div class="form-group">
-            <label for="inputBalance">Balance</label>
-            <input type="text" th:field="*{balance}" class="form-control" id="inputBalance">
+            <label for="inputAmount">Amount</label>
+            <input type="input" class="form-control" name="amount" id="inputAmount">
         </div>
 
         <div class="form-group">

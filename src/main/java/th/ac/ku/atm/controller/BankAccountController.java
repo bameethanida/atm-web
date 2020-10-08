@@ -28,14 +28,14 @@ public class BankAccountController {
         return "redirect:bankaccount";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/transaction/{id}")
     public String getEditBankAccountPage(@PathVariable int id, Model model) {
         BankAccount account = bankAccountService.getBankAccount(id);
         model.addAttribute("allBankAccounts", account);
         return "bankaccount-edit";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/transaction/{id}")
     public String editAccount(@PathVariable int id,
                               @ModelAttribute BankAccount bankAccount,
                               Model model) {
